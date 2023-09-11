@@ -1,0 +1,6 @@
+Note that Pillow is a python module, not Django module.
+Note that after installing django-cleanup, add django_cleanup.apps.CleanupConfig at the bottom of 
+your INSTALLED_APPS list in base.py if you want the it to automatically cleanup all models with 
+FileField and ImageField after their update and delete, else replace that with 
+django_cleanup.apps.CleanupSelectedConfig if you want to manually use a decorator to specify 
+all models it should work on.
