@@ -29,3 +29,12 @@ def new_item(request):
     form = NewItemForm()
   context = {"form": form, "form_type": form_type}
   return render(request, 'item/form.html', context)
+
+@login_required
+def delete(request, pk):
+  item = get_object_or_404(Item, id=pk, created_by=request.user)
+  if q := request.GET.get("q"):
+    item.delete()
+    return redirect("dashboard:index")
+  context = {"item": item}
+  return render(request, "item/delete.html", context)

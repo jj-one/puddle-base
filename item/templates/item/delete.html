@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block document_name %}Delete {{item.name}}{% endblock %}
+
+{% block content %}
+  <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+    <h1 class="mb-6 text-3xl">Delete {{item.name}}</h1>
+    <p class="text-gray-500"><strong>Do you really want to delete {{item}}?</strong></p>
+
+    <div class="space-x-6 items-center">
+      <a href="{% url 'item:delete' item.id %}?q=yes" 
+        class="inline-block mt-4 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">Yes</a>
+      <a href="{{request.META.HTTP_REFERER}}"
+        class="inline-block mt-4 px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Cancel</a>
+    </div>
+  </div>
+{% endblock %}
