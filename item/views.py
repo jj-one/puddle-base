@@ -5,7 +5,7 @@ from .models import Item
 def detail(request, pk):
   item = get_object_or_404(Item, id=pk)
   try:
-    related_items = Item.objects.filter(category=item.category).exclude(id=item.id, is_sold=True)[:3]
+    related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(id=item.id)[:3]
   except Exception as _:
     context = {"item": item}
     return render(request, 'item/detail.html', context)
