@@ -1,8 +1,28 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models.query import Q
 from django.contrib.auth.decorators import login_required
-from .models import Item
+from .models import Item, Category
 from .forms import NewItemForm, EditItemForm
 # Create your views here.
+
+
+def items(request):
+  query = request.GET.get("query", "")
+  category_id = request.GET.get("category", "")
+  if query:
+    items = Item.objects.filter(
+      Q(name__icontains=query) | 
+      Q(description__icontains=query) | 
+      Q(created_by__username__icontains=query)
+    )
+  elif category_id and category_id.isnumeric():
+    items = Item.objects.filter(category__id=category_id)
+    category_id = int(category_id)
+  else:
+    items = Item.objects.filter(is_sold=False)
+  categories = Category.objects.all()
+  context = {"items": items, "query": query, "categories": categories, "category_id": category_id}
+  return render(request, 'item/items.html', context)
 
 def detail(request, pk):
   item = get_object_or_404(Item, id=pk)
