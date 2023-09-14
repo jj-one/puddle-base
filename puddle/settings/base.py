@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core',
     'item',
     'dashboard',
+    'conversation',
     
     'django_cleanup.apps.CleanupConfig',
 ]

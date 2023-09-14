@@ -26,13 +26,14 @@ def items(request):
 
 def detail(request, pk):
   item = get_object_or_404(Item, id=pk)
-  try:
-    related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(id=item.id)[:3]
-  except Exception as _:
-    context = {"item": item}
-    return render(request, 'item/detail.html', context)
-  
-  context = {"item": item, "related_items": related_items}
+  current_user_conversation_id = ""
+  if request.user.is_authenticated and request.user != item.created_by:
+    existing_conversation = item.conversations.filter(participants__in=[request.user])
+    if existing_conversation:
+      current_user_conversation_id = existing_conversation[0].id
+
+  related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(id=item.id)[:3]
+  context = {"item": item, "related_items": related_items, "current_user_conversation_id": current_user_conversation_id}
   return render(request, 'item/detail.html', context)
 
 @login_required
